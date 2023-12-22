@@ -1,0 +1,61 @@
+@font-face {
+    font-family: 'Modak';
+    src: url('../../../assets/fonts/Modak-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family:'Inter-Bold';
+    src: url('../../../assets/fonts/static/Inter-Bold.ttf');
+}
+@font-face {
+    font-family:'Inter-Regular';
+    src: url('../../../assets/fonts/static/Inter-Regular.ttf');
+}
+.companyName{
+    font-family: 'Modak',sans-serif;
+    color: black;
+    border-color: white;
+}
+.interBold{
+    font-family: 'Inter-Bold',sans-serif;
+}
+.interRegular{
+    font-family: 'Inter-Regular',sans-serif;
+}
+a {
+    cursor: pointer !important;
+}
+
+.saldo {
+    font-size: 3em;
+}
+
+.error {
+    font-size: 0.8em;
+    color: red;
+}
+
+.alert {
+    top: 100px;
+}
+
+.blinking-circle {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: red;
+    display: inline-block;
+    margin-right: 5px;
+    animation: blinking 1s infinite alternate;
+}
+
+@keyframes blinking {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0.5;
+    }
+}

@@ -1,0 +1,6 @@
+<div *ngIf="!isLoading" class="container">
+    <div class="row mt-5">
+        <app-summary-trip [use]="use" class="col-md-5"></app-summary-trip>
+        <app-bike-card-resume-trip [bike]="bike" class="offset-md-2 col-md-5"></app-bike-card-resume-trip>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+<h1 class="text-center my-3">Summary</h1>
+<div class="rounded bg-dark text-white p-5">
+    <p><strong>Start:</strong> {{formatDate(use.fechaInicio)}}</p>
+    <p><strong>End:</strong> {{formatDate(use.fechaFin!)}}</p>
+    <p><strong>Total time:</strong> {{getInterval(use.fechaInicio, use.fechaFin!)}}</p>
+    <p><strong>Cost:</strong> {{use.coste.toFixed(2)}} €</p>
+</div>
+<button class="btn btn-outline-dark col-12 rounded-pill mt-3 mb-5" [routerLink]="['/home']">Back to Home</button>

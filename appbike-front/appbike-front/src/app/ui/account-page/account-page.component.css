@@ -1,0 +1,51 @@
+.vh-25{
+    height: 25vh;
+}
+
+.size{
+    font-size: 10rem;
+    color: black;
+}
+
+.darkGray{
+    background: linear-gradient(to bottom, #a3a3a3, #000000);
+    border-radius: 10px;
+    outline: 4px solid black;
+    box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.75);
+}
+
+.m-left-auto{
+    margin-left: auto;
+}
+
+.banner{
+    background: lightgray;
+    height: 25vh;
+    width: 100vw;
+}
+
+.h-90{
+    height: 90%;
+}
+
+.sentToTop{
+    margin-top: -1.25rem;
+}
+
+.min-vh-90{
+    min-height: 90vh;
+}
+
+.center{
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.addCardSize{
+    width: 80%;
+    height: 50%;
+}
+
+.cardSize{
+    font-size: 2rem;
+}

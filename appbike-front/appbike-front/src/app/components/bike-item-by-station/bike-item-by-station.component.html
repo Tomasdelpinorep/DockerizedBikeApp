@@ -1,0 +1,18 @@
+<!--<button (click)="rent()" class="btn">{{bike.nombre}}</button>-->
+<div class="card border-0 rounded-3">
+    <div class="text-center mx-5">
+        <img src="../../../assets/img/bike.png" class="card-img-top m-3 mx-auto w-75" alt="Imagen bici">
+    </div>
+    <div class="card-body text-center">
+        <div class="row">
+            <h6 class="col-6">{{bike.nombre}}</h6>
+            <h6 class="col-6">{{bike.marca}}</h6>
+        </div>
+        <div class="row">
+            <div class="col-12 px-5 pt-3">
+                <button type="button" class="btn btn-dark rounded-pill shadow" style="width: 100%;"
+                    (click)="rent()">RENT</button>
+            </div>
+        </div>
+    </div>
+</div>

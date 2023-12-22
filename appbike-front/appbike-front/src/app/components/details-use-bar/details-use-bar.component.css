@@ -1,0 +1,16 @@
+.btn {
+    font-size: 1.6em;
+    font-weight: 500;
+}
+
+img {
+    max-height: 100px;
+}
+
+p {
+    font-size: 1.6em;
+}
+
+.row {
+    background-color: rgb(187, 187, 187);
+}

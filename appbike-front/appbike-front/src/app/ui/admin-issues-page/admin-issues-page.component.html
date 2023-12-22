@@ -1,0 +1,104 @@
+<div class="container-fluid p-0 overflow-hidden">
+    <div class="row">
+        <div class="col-2">
+            <app-admin-navbar class="w-100 vh-100 d-block"></app-admin-navbar>
+        </div>
+
+        <div class="col-10 d-flex flex-column flex-wrap align-content-center">
+            <div class="container">
+                <h1 class="text-center ">Issues</h1>
+            <button class="btn btn-gray w-50 side-margin-auto mb-3 w-100" (click)="open(newIssueModal)"><i
+                    class=" m-auto bi bi-plus-square"></i></button>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Station</th>
+                        <th scope="col">Deadline Day</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Finished At</th>
+                        <th scope="col">Assigned To</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let issue of issueList">
+                        <td>{{issue.nombreEstacion}}</td>
+                        <td>{{issue.fechaProgramada}}</td>
+                        <td class="d-flex">{{issue.estado}} <p class="ms-3"
+                                *ngIf="isFinished(issue) && isOnTime(issue)">On Time</p>
+                            <p class="ms-3" *ngIf="!isOnTime(issue)">After Deadline</p>
+                        </td>
+                        <td>{{issue.fechaRealizacion}}</td>
+                        <td>{{issue.nombreTrabajador}}</td>
+                        <td class="text-end ">
+                            <button class="btn btn-light" *ngIf="!isFinished(issue)" (click)="setAsDone(issue)"><i
+                                    class="bi bi-check" style="color: #2fb63f;"></i></button>
+                            <button class="btn btn-light" (click)="showNotes(issue.anotaciones)"><i
+                                    class="bi bi-journal-bookmark "></i></button>
+                            <button class="btn btn-light"><i class="bi bi-trash"
+                                    (click)="deleteIssue(issue.id)"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL -->
+<ng-template #newIssueModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Create a new issue</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <form #newIssue="ngForm" (ngSubmit)="newIssue.form.valid && onSubmit()">
+            <div class="mb-3">
+                <label for="deadline">Deadline Date</label>
+                <div class="input-group">
+                    <input [(ngModel)]="form.deadline" #deadline="ngModel" name="deadline" class="form-control"
+                        placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker" required laterThanToday />
+                    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="dp.toggle()"
+                        type="button"></button>
+                </div>
+                <div class="alert-danger" *ngIf="deadline.errors &&  newIssue.submitted">
+                    <p class="text-danger " *ngIf="deadline.errors['laterThanToday']">Deadline must be after today.</p>
+                    <p class="text-danger " *ngIf="deadline.errors['required']">Deadline is required.</p>
+                </div>
+
+                <label for="anotaciones">Note</label>
+                <div class="input-group">
+                    <textarea class="form-control" [(ngModel)]="form.note" #note="ngModel" name="note" class="w-100 "
+                        id="anotaciones" cols="50" rows="3" maxlength="200"></textarea>
+                </div>
+                <div class="alert-danger" *ngIf="note.errors && newIssue.submitted">
+                    <p class="text-danger " *ngIf="note.errors['maxlength']">Notes must not exceed 200 characters</p>
+                </div>
+
+                <label for="station">Station</label>
+                <div class="input-group">
+                    <select class="form-select" #station="ngModel" [(ngModel)]="form.station" name="station" required>
+                        <option *ngFor="let station of stationList" [value]="station.name">{{station.name}}</option>
+                    </select>
+                </div>
+                <div class="alert-danger" *ngIf="station.errors && newIssue.submitted">
+                    <p class="text-danger " *ngIf="station.errors['required']">You must select a station</p>
+                </div>
+
+                <label for="worker">Assign To</label>
+                <div class="input-group">
+                    <select class="form-select" #worker="ngModel" [(ngModel)]="form.worker" name="worker" required>
+                        <option *ngFor="let worker of workerList" [value]="worker.nombre">{{worker.nombre}}</option>
+                    </select>
+                </div>
+                <div class="alert-danger" *ngIf="worker.errors && newIssue.submitted">
+                    <p class="text-danger " *ngIf="worker.errors['required']">You must select a worker</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-outline-dark">Save</button>
+            </div>
+        </form>
+    </div>
+</ng-template>

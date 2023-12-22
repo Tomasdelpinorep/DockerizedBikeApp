@@ -1,0 +1,219 @@
+<button (click)="openForm(bikeModal)"><i class="bi bi-plus"></i></button>
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="table-wrap">
+                    <table class="table table-bordered table-striped custom-table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Name</th>
+                                <th>Brand</th>
+                                <th>Model</th>
+                                <th>Condition</th>
+                                <th>Station</th>
+                                <th>Uses</th>
+                                <th>Available</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let b of listBikes">
+                                <th scope="row">{{b.nombre}}</th>
+                                <td>{{b.marca}}</td>
+                                <td>{{b.modelo}}</td>
+                                <td>{{b.estado}}</td>
+                                <td>{{b.estacion}}</td>
+                                <td>{{b.usos}}</td>
+                                <td><a class="btn avail btn-success boton">Yes</a></td>
+                                <td class="columnaButtons"><a class="btn btn-info"
+                                        (click)="openEditModal(bikeEditModal,b)"><span class="bi bi-pencil-square"
+                                            style="color: white; font-size: 17px;"></span></a>
+                                    <a class="btn btn-info" (click)="openPopDelete(deleteModal,b)"><span
+                                            class="bi bi-trash" style="color: white; font-size: 17px;"></span></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="d-flex" style="margin-left: 40%;">
+    <ngb-pagination class="custom-pagination" [maxSize]="5" [boundaryLinks]="true" [collectionSize]="countBikes"
+        [(page)]="currentPage" [pageSize]="20" (pageChange)="loadNewPage()" aria-label="Default pagination">
+    </ngb-pagination>
+</div>
+
+<ng-template #bikeModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Create a new bike</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <form #newBike="ngForm" (ngSubmit)="newBike.form.valid && onSubmit()">
+            <div class="mb-3">
+                <label for="nombre">Name</label>
+                <div class="input-group">
+                    <input [(ngModel)]="formBike.nombre" #nombre="ngModel" name="nombre" class="form-control"
+                        placeholder="Enter name of the bike" required minlength="3" maxlength="20" />
+                </div>
+                <p class="text-danger " *ngIf="messageOfNameDuplicated">{{ messageOfNameDuplicated }}</p>
+                <div class="alert-danger" *ngIf="nombre.errors && newBike.submitted">
+                    <p class="text-danger " *ngIf="nombre.errors['maxlength']">Name must be max 20 characters</p>
+                </div>
+                <div class="alert-danger" *ngIf="nombre.errors && newBike.submitted">
+                    <p class="text-danger " *ngIf="nombre.errors['minlength']">Name must be at least 3 characters</p>
+                </div>
+                <div class="alert-danger" *ngIf="nombre.errors && newBike.submitted">
+                    <p class="text-danger " *ngIf="nombre.errors['required']">Name is required</p>
+                </div>
+
+                <label for="marca">Brand</label>
+                <div class="input-group">
+                    <input [(ngModel)]="formBike.marca" #marca="ngModel" name="marca" class="form-control"
+                        placeholder="Enter brand of the bike" required minlength="3" maxlength="20" />
+                </div>
+
+                <div class="alert-danger" *ngIf="marca.errors && newBike.submitted">
+                    <p class="text-danger " *ngIf="marca.errors['maxlength']">Brand must be max 20 characters</p>
+                </div>
+                <div class="alert-danger" *ngIf="marca.errors && newBike.submitted">
+                    <p class="text-danger " *ngIf="marca.errors['minlength']">Brand must be at least 3 characters</p>
+                </div>
+                <div class="alert-danger" *ngIf="marca.errors && newBike.submitted">
+                    <p class="text-danger " *ngIf="marca.errors['required']">Brand is required</p>
+                </div>
+                <label for="modelo">Model</label>
+                <div class="input-group">
+                    <input [(ngModel)]="formBike.modelo" #modelo="ngModel" name="modelo" class="form-control"
+                        placeholder="Enter model of the bike" required minlength="3" maxlength="20" />
+                </div>
+
+                <div class="alert-danger" *ngIf="modelo.errors && newBike.submitted">
+                    <p class="text-danger " *ngIf="modelo.errors['maxlength']">Model must be max 20 characters</p>
+                </div>
+                <div class="alert-danger" *ngIf="modelo.errors && newBike.submitted">
+                    <p class="text-danger " *ngIf="modelo.errors['minlength']">Model must be at least 3 characters</p>
+                </div>
+                <div class="alert-danger" *ngIf="modelo.errors && newBike.submitted">
+                    <p class="text-danger " *ngIf="modelo.errors['required']">Model is required</p>
+                </div>
+
+                <label for="estado">Condition</label>
+                <div class="input-group">
+                    <select [(ngModel)]="formBike.estado" #estado="ngModel" class="form-select" name="estado" required>
+                        <option *ngFor="let condition of getConditionEnumValues()" [value]="condition">{{condition}}
+                        </option>
+                    </select>
+                </div>
+                <div class="alert-danger" *ngIf="estado.errors && newBike.submitted">
+                    <p class="text-danger " *ngIf="estado.errors['required']">You must select a condition of the bike
+                    </p>
+                </div>
+
+                <label for="estacion">Station</label>
+                <div class="input-group">
+                    <select #estacion="ngModel" class="form-select" [(ngModel)]="formBike.estacion" name="estacion">
+                        <option value="-1" style="font-weight: bold;">Without station</option>
+                        <option *ngFor="let station of stations" [value]="station.number">{{station.name}}</option>
+                    </select>
+                </div>
+                <p class="text-danger " *ngIf="messageOfStationFull">{{ messageOfStationFull }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btnSubmit btn-outline-dark">Save</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #bikeEditModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Edit bike - <span [textContent]="selectedBike.nombre"></span>
+        </h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <form #editBike="ngForm" (ngSubmit)="editBike.form.valid && edit()">
+            <div class="mb-3">
+                <label for="marca">Brand</label>
+                <div class="input-group">
+                    <input [(ngModel)]="formEditBike.marca" #marca="ngModel" name="marca" class="form-control"
+                        placeholder="Enter brand of the bike" required minlength="3" maxlength="20" />
+                </div>
+                <div class="alert-danger" *ngIf="marca.errors && editBike.submitted">
+                    <p class="text-danger " *ngIf="marca.errors['maxlength']">Brand must be max 20 characters</p>
+                </div>
+                <div class="alert-danger" *ngIf="marca.errors && editBike.submitted">
+                    <p class="text-danger " *ngIf="marca.errors['minlength']">Brand must be at least 3 characters</p>
+                </div>
+                <div class="alert-danger" *ngIf="marca.errors && editBike.submitted">
+                    <p class="text-danger " *ngIf="marca.errors['required']">Brand is required</p>
+                </div>
+                <label for="modelo">Model</label>
+                <div class="input-group">
+                    <input [(ngModel)]="formEditBike.modelo" #modelo="ngModel" name="modelo" class="form-control"
+                        placeholder="Enter model of the bike" required minlength="3" maxlength="20" />
+                </div>
+
+                <div class="alert-danger" *ngIf="modelo.errors && editBike.submitted">
+                    <p class="text-danger " *ngIf="modelo.errors['maxlength']">Model must be max 20 characters</p>
+                </div>
+                <div class="alert-danger" *ngIf="modelo.errors && editBike.submitted">
+                    <p class="text-danger " *ngIf="modelo.errors['minlength']">Model must be at least 3 characters</p>
+                </div>
+                <div class="alert-danger" *ngIf="modelo.errors && editBike.submitted">
+                    <p class="text-danger " *ngIf="modelo.errors['required']">Model is required</p>
+                </div>
+
+                <label for="estado">Condition</label>
+                <div class="input-group">
+                    <select [(ngModel)]="formEditBike.estado" #estado="ngModel" class="form-select" name="estado"
+                        required>
+                        <option *ngFor="let condition of getConditionEnumValues()" [value]="condition">{{condition}}
+                        </option>
+                    </select>
+                </div>
+                <div class="alert-danger" *ngIf="estado.errors && editBike.submitted">
+                    <p class="text-danger " *ngIf="estado.errors['required']">You must select a condition of the bike
+                    </p>
+                </div>
+
+                <label for="estacion">Station</label>
+                <div class="input-group">
+                    <select #estacion="ngModel" class="form-select" [(ngModel)]="formEditBike.estacion" name="estacion">
+                        <option [ngValue]="null" style="font-weight: bold;">Without station</option>
+                        <option *ngFor="let station of stations" [value]="station.number">{{station.name}}</option>
+                    </select>
+                </div>
+                <p class="text-danger " *ngIf="messageOfStationFull">{{ messageOfStationFull }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btnSubmit btn-outline-dark">Save</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #deleteModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title" style="color: rgb(255, 51, 51);">Delete bike</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <h5>Are you sure you want to delete <span style="color: rgb(255, 51, 51);"
+                [textContent]="selectedBike.nombre"></span>
+            bicycle?</h5>
+        <div class="container buttonsDelete" style="margin-left: 8%;">
+            <a class="btn btn-success" (click)="delete(selectedBike.nombre)"><span class="bi bi-check-lg"
+                    style="color: white; font-size: 17px;"></span></a>
+            <a class="btn btn-danger" (click)="modal.dismiss()"><span class="bi bi-x-lg"
+                    style="color: white; font-size: 17px;"></span></a>
+        </div>
+    </div>
+</ng-template>

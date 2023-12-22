@@ -1,0 +1,53 @@
+<div *ngIf="!isLoading" id="my-card" class="card w-40 d-block mx-auto">
+    <div class="image-container" style="background-image: url('../../../assets/img/banner-stations.png');"></div>
+    <h1 class="card-img-overlay text-white text-center mt-4">Station: {{station.name}}</h1>
+</div>
+<div *ngIf="errorRent" class="container">
+    <ngb-alert [dismissible]="false">
+        <strong>Warning!</strong> Yo can´t rent a bike. First, you have to finish your current trip.
+    </ngb-alert>
+</div>
+<div *ngIf="errorBalance" class="container">
+    <ngb-alert [dismissible]="false">
+        <strong>Warning!</strong> Yo can´t rent a bike. First, you have to recharge your balance.
+    </ngb-alert>
+</div>
+<div *ngIf="!isLoading" class="container">
+    <h3 class="mx-5"><i class="bi bi-bicycle"></i> {{getBikeListLenght()}} available</h3>
+    <div class="row w-100">
+        <div *ngFor="let bike of bikeList" class="col-md-3 mb-4 d-flex justify-content-center align-items-center">
+            <app-bike-item-by-station [bike]="bike" (bikeClick)="openModal($event, modal)"></app-bike-item-by-station>
+        </div>
+    </div>
+</div>
+<ng-template class="modalRent" #modal let-modal>
+    <!--<div class="modal-header">
+        
+    </div>-->
+    <div class="modal-body">
+        <button type="button" class="btn-close" style="float: right;" aria-label="Close"
+            (click)="modal.dismiss('Cross click')"></button>
+        <div class="text-center mt-3">
+            <img src="../../../assets/img/bike.png" class="card-img-top w-50" alt="Imagen bici">
+        </div>
+        <div class="mt-3 py-3 fondoGris mx-4">
+            <div class="row">
+                <h6 class="col-4 text-center">Nombre</h6>
+                <h6 class="col-4 text-center">Marca</h6>
+                <h6 class="col-4 text-center">Modelo</h6>
+            </div>
+            <div class="row">
+                <p class="col-4 text-center">{{bikeDetails.nombre}}</p>
+                <p class="col-4 text-center">{{bikeDetails.marca}}</p>
+                <p class="col-4 text-center">{{bikeDetails.modelo}}</p>
+            </div>
+            <div class="row">
+                <div class="col-12 px-5">
+                    <button type="button" class="btn btn-dark rounded-pill shadow" style="width: 100%;"
+                        (click)="modal.dismiss('Cross click'); rent()">RENT
+                        NOW</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,109 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: white !important; ">
+  <div class="container-fluid">
+    <div class="d-flex align-items-center">
+      <img src="../../../favicon.ico" alt="BikeApp" width="59px" height="59px" style="margin-right: 10px;">
+      <a class="navbar-brand companyName" [routerLink]="'/home'"
+        style="margin-right: 10px; font-size: 30px;">BikeApp</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="'/home'" style="color: black; font-size: 30px;"
+            [ngClass]="isHomeRoute() ? 'interBold' : 'interRegular'">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="'/rentabike'"
+            style="color: black; font-size: 30px; margin-left: 20px; margin-right: 20px;"
+            [ngClass]="isBikeRoute() ? 'interBold' : 'interRegular'">Rent a Bike</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="'/travels'" style="color: black; font-size: 30px;"
+            [ngClass]="isTravelRoute() ? 'interBold' : 'interRegular'">Travels</a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav">
+        <li class="nav-item d-flex align-items-center" *ngIf="!terminado">
+          <div class="blinking-circle"></div>
+          <a class="nav-link" [routerLink]="['/use/trip']">{{tiempoTranscurrido}}</a>
+        </li>
+        <li class="nav-item" *ngIf="isUser">
+          <a class="nav-link" (click)="openModal(content)" style="color: black;">Saldo</a>
+        </li>
+        <li class="nav-item" *ngIf="!isLoggedIn">
+          <a class="nav-link" [routerLink]="'/register'" style="color: black;">Sign Up</a>
+        </li>
+        <li class="nav-item" *ngIf="!isLoggedIn">
+          <a class="nav-link" [routerLink]="'/login'" style="color: black;">Login</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a *ngIf="isUser" class="nav-link" [routerLink]="'/user'" style="color: black;">{{user.username}}</a>
+          <a *ngIf="isAdmin" class="nav-link" [routerLink]="'/admin/issues'" style="color: black;">Admin Board</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a class="nav-link" (click)="logout()" style="color: black;">LogOut</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<ngb-alert *ngIf="isSuccessful" class="mt-2 text-center alert w-75 mx-auto position-absolute start-50 translate-middle"
+  type="success">
+  The balance recharge was successful!
+</ngb-alert>
+
+<ng-template class="modalBalance" #content let-modal>
+  <!--<div class="modal-header">
+      
+  </div>-->
+  <div *ngIf="!isLoadingModal" class="modal-body">
+    <button type="button" class="btn-close" style="float: right;" aria-label="Close"
+      (click)="modal.dismiss('Cross click')"></button>
+    <div class="text-center mt-3">
+      <h1><i class="bi bi-coin"></i> My Balance</h1>
+    </div>
+    <div class="fondoGris mx-4">
+      <div class="row text-center">
+        <p class="text-center saldo">{{userDetails.saldo.toFixed(2)}}€</p>
+      </div>
+      <form (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+        <div class="row mb-3">
+          <div class="col">
+            <label for="recharge" class="form-label">Recharge</label>
+            <input [(ngModel)]="form.recharge" type="number" name="recharge" id="recharge" class="form-control" required
+              min="2" max="100" #recharge="ngModel">
+            <div class="alert-danger" *ngIf="recharge.errors && f.submitted">
+              <div class="error" *ngIf="recharge.errors['required']">Recharge is required</div>
+              <div class="error" *ngIf="recharge.errors['min']">The minimum recharge is 2€</div>
+              <div class="error" *ngIf="recharge.errors['max']">The maximum recharge is 100€</div>
+            </div>
+          </div>
+          <div class="col">
+            <label for="pin" class="form-label">Pin</label>
+            <input [(ngModel)]="form.pin" type="password" name="pin" id="pin" class="form-control" required
+              minlength="4" maxlength="4" minlength="4" #pin="ngModel">
+            <div class="alert-danger" *ngIf="pin.errors && f.submitted">
+              <div class="error" *ngIf="pin.errors['required']">The PIN is required</div>
+              <div class="error" *ngIf="pin.errors['maxlength']">The pin must be 4 characters long</div>
+              <div class="error" *ngIf="pin.errors['minlength']">The pin must be 4 characters long</div>
+              <!--alert verde que se ha agregado correctamente-->
+            </div>
+            <div class="error" *ngIf="incorrectPin">Incorrect Pin</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 mt-3 form-field">
+            <button type="submit" class="btn btn-dark rounded-pill shadow" style="width: 100%;">Recargar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div *ngIf="isLoadingModal" class="d-flex justify-content-center align-items-center vh-100">
+    <div class="spinner-border text-light" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</ng-template>

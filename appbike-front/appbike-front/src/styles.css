@@ -1,0 +1,23 @@
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+}
+
+* {
+    font-family: 'Inter', sans-serif;
+    --bs-pagination-active-bg: lightgray!important;
+    --bs-pagination-active-border-color: black!important;
+    --bs-pagination-active-color: black!important;
+    --bs-pagination-color: black!important;
+    --bs-pagination-bg: white;
+    --bs-pagination-hover-color: white;
+    --bs-pagination-hover-bg: gray;
+    --bs-pagination-disabled-bg: black;
+    --bs-pagination-disabled-color: gray;
+    --bs-pagination-focus-color: black !important;
+    --bs-pagination-focus-box-shadow: lightgray !important;
+}

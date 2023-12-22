@@ -1,0 +1,134 @@
+<div class="banner position-absolute"></div>
+<div class="container z-3 position-relative min-vh-90 ">
+    <div class="row">
+        <div class="col-8">
+            <div class="userDetailscontainer d-flex vh-25 flex-wrap align-content-center overflow-hidden">
+                <div class="userImageContainer col-4 h-100">
+                    <i class="bi bi-person-fill d-block w-100 h-100 overflow-hidden size text-center"></i>
+                </div>
+                <div class="userDetailsTextContainer d-flex flex-column col-8 m-auto">
+                    <h1>{{userDetails.username}}</h1>
+                    <h5>{{userDetails.nombre}}</h5>
+                    <h5>{{userDetails.email}}</h5>
+                    <p class="fst-italic ">Member since: {{userDetails.createdAt}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-4 d-flex flex-wrap align-content-center">
+            <div *ngIf="userDetails.numTarjeta !=null && userDetails != undefined"
+                class="text-white d-flex flex-column darkGray h-90 w-100">
+                <div class="topRowContainer d-flex">
+                    <div class="textContainer fst-italic mt-4 ps-2">
+                        <h5>Balance</h5>
+                        <p class="text-light">{{today}}</p>
+                    </div>
+                    <div class="logoContainer m-left-auto mt-4 m-left-auto">
+                        <img _ngcontent-ng-c2855160279="" src="../../../favicon.ico" class="me-2 sentToTop"
+                            alt="BikeApp" width="55px">
+                    </div>
+                </div>
+                <div class="balanceContainer mt-auto d-flex flex-column ">
+                    <h1 class="ps-2">{{userDetails.saldo}}€</h1>
+                    <button class="btn btn-dark btn-outline-light w-50 ms-2 mb-1">Add Balance</button>
+                </div>
+            </div>
+
+            <div *ngIf="userDetails.numTarjeta ==null || userDetails == undefined"
+                class="text-white d-flex flex-column darkGray h-90 w-100">
+                <div class="topRowContainer d-flex">
+                    <div class="textContainer fst-italic mt-4 ps-2">
+                        <h3>No Card Added</h3>
+                        <p class="text-light">{{today}}</p>
+                    </div>
+                    <div class="logoContainer m-left-auto mt-4 m-left-auto">
+                        <img _ngcontent-ng-c2855160279="" src="../../../favicon.ico" class="me-2 sentToTop"
+                            alt="BikeApp" width="55px">
+                    </div>
+                </div>
+                <div class="balanceContainer mt-auto d-flex flex-column h-75 ">
+                    <button (click)="open(addCardModal)"
+                        class="btn btn-dark btn-outline-light h-100  w-50  ms-2 mb-1 rounded">Add Card <br>
+                        <i class="bi bi-credit-card text-center cardSize"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table mt-5">
+        <thead>
+            <tr>
+                <th scope="col">Bike</th>
+                <th scope="col">Started At</th>
+                <th scope="col">Finished At</th>
+                <th scope="col">Final Cost</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let uso of usesByUserList">
+                <td>{{uso.bicicleta}}</td>
+                <td>{{uso.fechaInicio}}</td>
+                <td>{{uso.fechaFin}} in {{uso.estacionFin}}</td>
+                <td>{{uso.coste}}€</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div *ngIf="listSize >= 10" class="paginationContainer position-absolute  bottom-0 center">
+        <ngb-pagination class="custom-pagination" [boundaryLinks]="true" [collectionSize]="listSize"
+            [(page)]="currentPage" [pageSize]="10" (pageChange)="loadNewPage()" aria-label="Default pagination">
+        </ngb-pagination>
+    </div>
+</div>
+
+<!-- Add Card Modal -->
+<ng-template #addCardModal let-modal>
+    <div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Add Card</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+	</div>
+	<div class="modal-body">
+		<form #addCard="ngForm" (ngSubmit)="addCard.form.valid && onSubmit()">
+			<div class="mb-3">
+				<label for="cardNumber">Card Number</label>
+				<div class="input-group">
+					<input [(ngModel)]="form.cardNumber" #cardNumber="ngModel" name="cardNumber" required
+                    pattern="\d{4}-\d{4}-\d{4}-\d{4}" class="form-control" placeholder="XXXX-XXXX-XXXX-XXXX" />
+				</div>
+                <div class="alert-danger" *ngIf="cardNumber.errors && addCard.submitted">
+                    <p class="text-danger" *ngIf="cardNumber.errors['required']">Card number is required.</p>
+                </div>
+                <div class="alert-danger" *ngIf="cardNumber.errors && addCard.submitted">
+                    <p class="text-danger" *ngIf="cardNumber.errors['pattern']">Correct format is: XXXX-XXXX-XXXX-XXXX</p>
+                </div>
+			</div>
+
+            <label for="pin">Pin Number</label>
+            <div class="input-group">
+                <input class="form-control" [(ngModel)]="form.pin" #pin="ngModel" name="pin" required pattern="\d{4}"
+                placeholder="1234">
+            </div>
+            <div class="alert-danger" *ngIf="pin.errors && addCard.submitted">
+                <p class="text-danger" *ngIf="pin.errors['required']">Pin is required.</p>
+            </div>
+            <div class="alert-danger" *ngIf="pin.errors && addCard.submitted">
+                <p class="text-danger" *ngIf="pin.errors['pattern']">Must be 4 digits.</p>
+            </div>
+
+            <label for="pinRepeat">Confirm Pin Number</label>
+            <div class="input-group">
+                <input class="form-control" [(ngModel)]="form.pinRepeat" #pinRepeat="ngModel" name="pinRepeat" required pattern="\d{4}"
+                placeholder="1234" pinMatch [pin]="form.pin">
+            </div>
+            <div class="alert-danger" *ngIf="pinRepeat.errors && addCard.submitted">
+                <p class="text-danger" *ngIf="pinRepeat.errors['required']">Pin must be confirmed.</p>
+            </div>
+            <div class="alert-danger" *ngIf="pinRepeat.errors && addCard.submitted">
+                <p class="text-danger" *ngIf="pinRepeat.errors['pinMismatch']">Pins are not equal.</p>
+            </div>
+
+            <button type="submit" class="btn btn-outline-dark mt-2 ">Add</button>
+		</form>
+	</div>
+</ng-template>

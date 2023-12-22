@@ -1,0 +1,112 @@
+<div class="container-fluid p-0 non-scroll">
+  <div class="row">
+    <div class="col-2">
+      <app-admin-navbar class="w-100 vh-100 d-block"></app-admin-navbar>
+    </div>
+    <div class="col-10">
+      <div class="container">
+        <h1>Stations</h1>
+        <button class="btn btn-gray d-flex justify-content-center align-items-center" (click)="openModal(content)"
+          style="width: 100%;">
+          <i class="bi bi-plus-square-fill"></i>
+        </button>
+        <table class="table table-bordered table-striped custom-table">
+          <thead class="thead-dark">
+            <tr>
+              <th>Number</th>
+              <th>Name</th>
+              <th>Coordinates</th>
+              <th>Capacity</th>
+              <th>Bikes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let station of stations">
+              <tr>
+                <td>{{ station.number }}</td>
+                <td>{{ station.name }}</td>
+                <td>{{ station.coordinates }}</td>
+                <td>{{ station.capacity }}</td>
+                <td>{{ station.bikes }}</td>
+                <td>
+                  <img src="../../../assets/img/eliminar.png" alt="trash" style="width: 20px; cursor: pointer;"
+                    (click)="delete(station.number)">
+                </td>
+                <td>
+                  <img src="../../../assets/img/edit.png" alt="trash" style="width: 20px; cursor: pointer;"
+                    (click)="openEditModal(content,station)">
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+        <ng-template #content let-modal>
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-title">Nueva Estación</h5>
+            <button type="button" class="close transparent-close" aria-label="Close" (click)="closeModal()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form (ngSubmit)="submitForm()" #stationForm="ngForm">
+              <div class="form-group">
+                <label for="stationName">Name</label>
+                <input type="text" class="form-control" id="stationName" name="stationName"
+                  [(ngModel)]="stationData.nombre" required minlength="3" pattern="[A-Za-z-´][A-Za-z0-9\s]*">
+                <div class="alert-danger" *ngIf="stationForm.controls['stationName'].errors && stationForm.submitted"
+                  style="color: red; border-color: red;">
+                  <div *ngIf="stationForm.controls['stationName'].errors['required']">Name is required</div>
+                  <div *ngIf="stationForm.controls['stationName'].errors['minlength']">
+                    Name must be at least 3 characters
+                  </div>
+                  <div *ngIf="stationForm.controls['stationName'].errors['pattern']">
+                    Name must start with a letter and can only contain letters, numbers, and spaces
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="stationCoordinates">Coordinates</label>
+                <input type="text" class="form-control" id="stationCoordinates" name="stationCoordinates"
+                  [(ngModel)]="stationData.coordenadas" required
+                  pattern="^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?((1[0-7]\d)|([1-9]?\d)|180)(\.\d+)?$">
+                <div class="alert-danger"
+                  *ngIf="stationForm.controls['stationCoordinates'].errors && stationForm.submitted"
+                  style="color: red; border-color: red;">
+                  <div *ngIf="stationForm.controls['stationCoordinates'].errors['required']">Coordinates are required
+                  </div>
+                  <div *ngIf="stationForm.controls['stationCoordinates'].errors['pattern']">
+                    Invalid coordinates format. Please enter coordinates in the format 'latitude,
+                    longitude'.ex:38.1471300,-3.7495600
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="stationCapacity">Capacity</label>
+                <select class="form-control" id="stationCapacity" name="stationCapacity"
+                  [(ngModel)]="stationData.capacidad" required min="0" max="31">
+                  <option *ngFor="let number of capacityNumbers" [value]="number">{{ number }}</option>
+                </select>
+                <div class="alert-danger"
+                  *ngIf="stationForm.controls['stationCapacity'].errors && stationForm.submitted"
+                  style="color: red; border-color: red;">
+                  <div *ngIf="stationForm.controls['stationCapacity'].errors['required']">Capacity is required</div>
+                  <div *ngIf="stationForm.controls['stationCapacity'].errors['min']">
+                    Capacity must be at least 1
+                  </div>
+                  <div *ngIf="stationForm.controls['stationCapacity'].errors['max']">
+                    Capacity must be at most 31
+                  </div>
+                </div>
+              </div>
+              <button type="submit"
+                class="btn btn-gray btn-transparent d-flex justify-content-center align-items-center"
+                style="width: 100%; margin-top: 10px;">
+                Save
+              </button>
+            </form>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

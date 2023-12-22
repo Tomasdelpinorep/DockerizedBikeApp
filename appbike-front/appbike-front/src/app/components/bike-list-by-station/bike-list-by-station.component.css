@@ -1,0 +1,29 @@
+.fondoGris {
+    padding-top: 10px;
+    border-radius: 20px;
+    background-color: #DDDDDD;
+}
+
+.btn {
+    background-color: #3A3A3A;
+    font-size: 0.8em;
+}
+
+.bi-bicycle {
+    font-size: 1.5em;
+}
+
+.image-container {
+    width: 100%;
+    height: 150px;
+    background-size: cover;
+    /* Ajusta el tamaño del fondo para cubrir el contenedor */
+    background-position: center;
+    /* Centra la imagen en el contenedor */
+    background-repeat: no-repeat;
+    /* Evita repetir la imagen */
+}
+
+h1 {
+    font-weight: 700;
+}

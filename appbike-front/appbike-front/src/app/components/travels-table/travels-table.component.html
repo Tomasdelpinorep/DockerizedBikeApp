@@ -1,0 +1,110 @@
+<div class="mt-3 container">
+    <h1 class="text-center">Travels</h1>
+
+    <table class="table table-bordered table-striped custom-table">
+        <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>Start Date</th>
+                <th>Finish Date</th>
+                <th>Cost</th>
+                <th>Bike</th>
+                <th>Station</th>
+                <th>Username</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container>
+                <tr *ngFor="let use of useList">
+                    <td>{{use.id}}</td>
+                    <td>{{formatDate(use.fechaInicio)}}</td>
+                    <td>{{formatDate(use.fechaFin)}}</td>
+                    <td>{{use.coste.toFixed(2)}}€</td>
+                    <td>{{use.bicicleta}}</td>
+                    <td>{{use.estacionFin}}</td>
+                    <td>{{use.usuario}}</td>
+                    <td [ngClass]="{ 'bg-success': inTrip, 'bg-danger': !inTrip}" *ngIf="!inTrip">Finished</td>
+                    <td [ngClass]="{ 'bg-success': inTrip, 'bg-danger': !inTrip}" *ngIf="inTrip">In Travel</td>
+                    <td>
+                        <i *ngIf="!inTrip" (click)="openModal(content, use)"
+                            class="bi bi-pencil-square editButton"></i><!--(click)="openEditModal(content,station)"-->
+                        <ng-template #content let-modal>
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal-title">Edita el coste</h5>
+                                <button type="button" class="close transparent-close" aria-label="Close"
+                                    (click)="modal.dismiss('Cross click')">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+                                    <div class="form-group">
+                                        <label for="id">Id</label>
+                                        <input type="text" class="form-control" id="id" name="id"
+                                            [value]="useDetails.id" readonly>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <label for="startDate">Start Date</label>
+                                        <input [value]="formatDate(useDetails.fechaInicio)" type="text"
+                                            class="form-control" id="startDate" name="startDate" readonly>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <label for="finalDate">Final Date</label>
+                                        <input type="text" class="form-control" id="finalDate" name="finalDate"
+                                            [value]="formatDate(useDetails.fechaFin)" readonly>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <label for="cost">Cost</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">€</span>
+                                            </div>
+                                            <input [(ngModel)]="useDetails.coste" class="form-control" type="number"
+                                                name="cost" id="cost" required min="0" max="100" #cost="ngModel"
+                                                step="0.01" />
+                                        </div>
+                                        <div class="alert-danger mt-1" *ngIf="cost.errors && f.submitted">
+                                            <div class="error" *ngIf="cost.errors['required']">Cost is required</div>
+                                            <div class="error" *ngIf="cost.errors['min']">The minimum cost is 0€</div>
+                                            <div class="error" *ngIf="cost.errors['max']">The maximum cost is 100€</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <label for="bike">Bike</label>
+                                        <input type="text" class="form-control" id="bike" name="bike"
+                                            [value]="useDetails.bicicleta" readonly>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <label for="station">Station</label>
+                                        <input type="text" class="form-control" id="station" name="station"
+                                            [value]="useDetails.estacionFin" readonly>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <label for="username">Username</label>
+                                        <input type="text" class="form-control" id="username" name="username"
+                                            [value]="useDetails.usuario" readonly>
+                                    </div>
+                                    <button type="submit"
+                                        class="btn btn-gray btn-transparent d-flex justify-content-center align-items-center"
+                                        style="width: 100%; margin-top: 10px;">
+                                        Save
+                                    </button>
+                                </form>
+                            </div>
+                        </ng-template>
+                    </td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+
+
+    <div class="d-flex" style="margin-left: 40%;">
+        <ngb-pagination class="custom-pagination" [maxSize]="5" [boundaryLinks]="true" [collectionSize]="countUses"
+            [(page)]="pageForPagination" [pageSize]="20" (pageChange)="loadNewPage()" aria-label="Default pagination">
+        </ngb-pagination>
+    </div>
+
+</div>

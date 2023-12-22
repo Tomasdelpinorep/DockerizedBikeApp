@@ -1,0 +1,16 @@
+<div class="gray w-100 h-100">
+    <ul class="pt-5 ">
+        <li style="cursor: pointer;" [routerLink]="'/admin/stations'">
+            <p [ngStyle]="isStationsRoute() ? {'font-weight': 'bold'} : {}">Stations</p>
+        </li>
+        <li style="cursor: pointer;" [routerLink]="'/admin/bikes'">
+            <p [ngStyle]="isBikeRoute() ? {'font-weight': 'bold'} : {}">Bikes</p>
+        </li>
+        <li style="cursor: pointer;" [routerLink]="'/admin/issues'">
+            <p [ngStyle]="isIssuesRoute() ? {'font-weight': 'bold'} : {}">Issues</p>
+        </li>
+        <li style="cursor: pointer;" [routerLink]="'/admin/travels'">
+            <p [ngStyle]="isTravelsRoute() ? {'font-weight': 'bold'} : {}">Travels</p>
+        </li>
+    </ul>
+</div>
